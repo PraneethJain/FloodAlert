@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -11,18 +13,23 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: white;
+  font-family: Poppins, sans-serif;
+}
+
+.landingPage > h1 {
+  text-align: left;
+  padding-top: 1rem;
+  padding-left: 2rem;
+  font-size: 3rem;
+  color: #b9dffe;
+  user-select: none;
 }
 
 .content {
-  height: 65vh;
+  /* height: 65vh; */
   width: 100%;
-}
-
-.flex {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }
 
 .waves {
