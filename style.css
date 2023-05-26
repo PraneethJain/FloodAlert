@@ -1,82 +1,75 @@
-body {
-  display: flex;
-  background: black;
-  justify-content: flex-end;
-  align-items: flex-end;
-  min-height: 100vh;
+* {
   margin: 0;
   padding: 0;
 }
 
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
+.landingPage {
+  position: relative;
+  text-align: center;
+  background: linear-gradient(60deg, #07284a 0%, #0a4070 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* color: white; */
 }
 
-.footer {
-  position: relative;
+.content {
+  height: 65vh;
   width: 100%;
-  background: #3586ff;
-  min-height: 100px;
-  padding: 20px 50px;
+}
+
+.flex {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  text-align: center;
 }
 
-.wave {
-  position: absolute;
-  top: -100px;
-  left: 0;
+.waves {
+  position: relative;
   width: 100%;
-  height: 100px;
-  background: url("https://i.ibb.co/wQZVxxk/wave.png");
-  background-size: 1000px 100px;
+  height: 15vh;
+  margin-bottom: -7px;
+  min-height: 100px;
+  max-height: 150px;
 }
 
-.wave#wave1 {
-  z-index: 1000;
-  opacity: 1;
-  bottom: 0;
-  animation: animateWaves 4s linear infinite;
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
 }
 
-.wave#wave2 {
-  z-index: 999;
-  opacity: 0.5;
-  bottom: 10px;
-  animation: animate 4s linear infinite !important;
-}
-
-.wave#wave3 {
-  z-index: 1000;
-  opacity: 0.2;
-  bottom: 15px;
-  animation: animateWaves 3s linear infinite;
-}
-
-.wave#wave4 {
-  z-index: 999;
-  opacity: 0.7;
-  bottom: 20px;
-  animation: animate 3s linear infinite;
-}
-
-@keyframes animateWaves {
+@keyframes move-forever {
   0% {
-    background-position-x: 1000px;
+    transform: translate3d(-90px, 0, 0);
   }
   100% {
-    background-positon-x: 0px;
+    transform: translate3d(85px, 0, 0);
   }
 }
 
-@keyframes animate {
-  0% {
-    background-position-x: -1000px;
+@media (max-width: 768px) {
+  .waves {
+    height: 40px;
+    min-height: 40px;
   }
-  100% {
-    background-positon-x: 0px;
+  .content {
+    height: 30vh;
   }
 }
