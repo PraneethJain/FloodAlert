@@ -27,9 +27,17 @@
 }
 
 .content {
-  /* height: 65vh; */
   width: 100%;
   display: flex;
+  justify-content: space-between;
+}
+
+.content > .left {
+}
+
+.content > .right {
+  width: 50%;
+  padding-right: 1rem;
 }
 
 .waves {
