@@ -1,6 +1,8 @@
 let progressBar = document.querySelector(".circular-progress");
 let valueContainer = document.querySelector(".value-container");
 
+let goButton = document.querySelector(".go");
+
 const updateCircle = (val) => {
   let currentIndex = 0;
   let progressValue = 0;
@@ -157,3 +159,18 @@ function removeData(chart) {
   });
   chart.update();
 }
+
+const setUp = () => {
+  goButton.classList.add("up");
+  goButton.setAttribute("href", "#landingPage");
+};
+
+const setDown = () => {
+  goButton.classList.remove("up");
+  goButton.setAttribute("href", "#dataPage");
+};
+
+goButton.addEventListener("click", () => {
+  if (goButton.classList.contains("up")) setTimeout(setDown, 400);
+  else setTimeout(setUp, 400);
+});

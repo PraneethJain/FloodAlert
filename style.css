@@ -153,3 +153,7 @@ body {
 .invert {
   transform: rotate(180deg) translateY(1rem);
 }
+
+.up {
+  transform: rotate(180deg);
+}
