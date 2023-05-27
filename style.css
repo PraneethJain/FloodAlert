@@ -100,7 +100,7 @@
   content: "";
   position: absolute;
   height: 85%;
-  width: 85%;
+  aspect-ratio: 1/1;
   background-color: #093259;
   border-radius: 50%;
 }
