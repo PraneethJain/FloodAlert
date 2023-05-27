@@ -65,24 +65,24 @@ const updateCircle = (val) => {
 
 const ctx = document.getElementById("linechart");
 const data = {
-  labels: [
-    "Day 1",
-    "Day 2",
-    "Day 3",
-    "Day 4",
-    "Day 5",
-    "Day 6",
-    "Day 7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-  ],
+  // labels: [
+  //   "Day 1",
+  //   "Day 2",
+  //   "Day 3",
+  //   "Day 4",
+  //   "Day 5",
+  //   "Day 6",
+  //   "Day 7",
+  //   "8",
+  //   "9",
+  //   "10",
+  //   "11",
+  //   "12",
+  // ],
   datasets: [
     {
       label: "Percent",
-      data: [17, 5, 32, 12, 7, 59, 90],
+      // data: [17, 5, 32, 12, 7, 59, 90],
       borderColor: "rgba(255, 255, 255, 0.8)",
       backgroundColor: "rgba(255, 255, 255, 0.5)",
       pointStyle: "circle",
@@ -92,7 +92,7 @@ const data = {
   ],
 };
 
-let c = new Chart(ctx, {
+let floodProbability = new Chart(ctx, {
   type: "line",
   data: data,
   options: {
@@ -145,7 +145,7 @@ let probabilities = [];
     if (feed.field8) probabilities.push(feed.field8);
   });
 
-  addData(c, probabilities);
+  addData(floodProbability, probabilities);
   updateCircle(probabilities[probabilities.length - 1]);
 })();
 
