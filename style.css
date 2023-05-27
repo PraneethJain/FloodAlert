@@ -147,4 +147,9 @@ body {
 .dataPage {
   width: 100vw;
   height: 100vh;
+  background: linear-gradient(60deg, #07284a 0%, #0a4070 100%);
+}
+
+.invert {
+  transform: rotate(180deg) translateY(1rem);
 }
