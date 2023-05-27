@@ -23,8 +23,8 @@
 .landingPage > h1 {
   text-align: left;
   padding-top: 1rem;
-  padding-left: 2rem;
-  font-size: 3rem;
+  padding-left: 5rem;
+  font-size: 4rem;
   color: #b9dffe;
   user-select: none;
 }
@@ -84,12 +84,18 @@
 
 .circular-progress {
   position: relative;
-  height: 250px;
-  width: 250px;
+  height: 20rem;
+  aspect-ratio: 1/1;
   border-radius: 50%;
   display: grid;
   place-items: center;
+  transition: 0.3s;
 }
+
+.circular-progress:hover {
+  box-shadow: 0 0 2rem 2rem rgba(0, 0, 0, 0.2);
+}
+
 .circular-progress:before {
   content: "";
   position: absolute;
@@ -98,9 +104,11 @@
   background-color: #093259;
   border-radius: 50%;
 }
+
 .value-container {
   position: relative;
-  font-size: 50px;
+  user-select: none;
+  font-size: 4rem;
   font-family: Poppins;
   color: #bce1fb;
 }
