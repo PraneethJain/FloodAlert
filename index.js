@@ -1,6 +1,5 @@
 let progressBar = document.querySelector(".circular-progress");
 let valueContainer = document.querySelector(".value-container");
-
 let goButton = document.querySelector(".go");
 
 const updateCircle = (val) => {
@@ -17,7 +16,7 @@ const updateCircle = (val) => {
     valueContainer.textContent = `${progressValue}%`;
     progressBar.style.background = `conic-gradient(
           ${getProgressColor(progressValue)} ${progressValue * 3.6}deg,
-          #cadcff ${progressValue * 3.6}deg 
+          #cadcff ${progressValue * 3.6}deg
       )`;
 
     if (progressValue == progressEndValue) {
@@ -121,27 +120,33 @@ let c = new Chart(ctx, {
   },
 });
 
-const readUltrasonic = async () => {
-  const response = await fetch(
-    "https://api.thingspeak.com/channels/2151430/fields/8.json?results=60"
-  );
-  const x = await response.json();
-  // console.log(x);
-  let arr = [];
-  for (let i = 0; i < x.feeds.length; ++i) {
-    if (x.feeds[i].field8) arr.push(x.feeds[i].field8);
-  }
-  // console.log(arr);
-  addData(c, arr);
-  // const res = await fetch(
-  //   "https://api.thingspeak.com/update?api_key=YSQDHI1PZ3YPFENE&field8=74"
-  // );
-  // await res.json();
-  updateCircle(arr[arr.length - 1]);
-};
-
+let ultrasonicReadings = [];
+let waterLevelReadings = [];
+let waterFlowReadings = [];
+let soilMoistureReadings = [];
+let temperatureReadings = [];
+let pressureReadings = [];
+let humidityReadings = [];
+let probabilities = [];
 (async function test() {
-  await readUltrasonic();
+  const response = await fetch(
+    "https://api.thingspeak.com/channels/2151430/feeds.json?results=60"
+  );
+  const data = await response.json();
+
+  data.feeds.forEach((feed) => {
+    if (feed.field1) ultrasonicReadings.push(feed.field1);
+    if (feed.field2) waterLevelReadings.push(feed.field2);
+    if (feed.field3) waterFlowReadings.push(feed.field3);
+    if (feed.field4) soilMoistureReadings.push(feed.field4);
+    if (feed.field5) temperatureReadings.push(feed.field5);
+    if (feed.field6) pressureReadings.push(feed.field6);
+    if (feed.field7) humidityReadings.push(feed.field7);
+    if (feed.field8) probabilities.push(feed.field8);
+  });
+
+  addData(c, probabilities);
+  updateCircle(probabilities[probabilities.length - 1]);
 })();
 
 function addData(chart, arr) {
