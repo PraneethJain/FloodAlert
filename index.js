@@ -63,7 +63,7 @@ const updateCircle = (val) => {
   progress = setInterval(updateProgress, speed);
 };
 
-const linechart_ctx = document.getElementById("linechart");
+const probabilities_ctx = document.getElementById("probabilities");
 const ultrasonic_ctx = document.getElementById("ultrasonic");
 const water_level_ctx = document.getElementById("water-level");
 const water_flow_ctx = document.getElementById("water-flow");
@@ -82,29 +82,35 @@ const data = {
   ],
 };
 
-let floodProbability = new Chart(linechart_ctx, {
-  type: "line",
-  data: data,
+let floodProbability = new Chart(probabilities_ctx, {
+  type: "doughnut",
+  data: {
+    labels: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    datasets: [
+      {
+        data: [10, 20, 30, 40, 50, 60, 70, 80],
+      },
+    ],
+  },
   options: {
     responsive: true,
     plugins: {
+      legend: {
+        position: "bottom",
+      },
       title: {
         display: true,
-        text: () => "Flood chances",
+        text: () => "Flood Factors",
         color: "rgba(255, 255, 255, 1)", // Title Color
       },
     },
     color: "rgba(255, 255, 255, 1)", // Legend Color
     scales: {
       x: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
+        display: false,
       },
       y: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
+        display: false,
       },
     },
   },
@@ -293,7 +299,7 @@ let probabilities = [];
   waterLevelReadings = [32, 35, 37, 31, 40, 45];
   waterFlowReadings = [32, 35, 37, 31, 40, 45];
   humidityReadings = [32, 35, 37, 31, 40, 45];
-  addData(floodProbability, probabilities);
+  // addData(floodProbability, probabilities);
   addData(ultrasonicChart, ultrasonicReadings);
   addData(waterLevelChart, waterLevelReadings);
   addData(waterFlowChart, waterFlowReadings);
