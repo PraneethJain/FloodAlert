@@ -63,26 +63,16 @@ const updateCircle = (val) => {
   progress = setInterval(updateProgress, speed);
 };
 
-const ctx = document.getElementById("linechart");
+const linechart_ctx = document.getElementById("linechart");
+const ultrasonic_ctx = document.getElementById("ultrasonic");
+const water_level_ctx = document.getElementById("water-level");
+const water_flow_ctx = document.getElementById("water-flow");
+const humidity_ctx = document.getElementById("humidity");
+
 const data = {
-  // labels: [
-  //   "Day 1",
-  //   "Day 2",
-  //   "Day 3",
-  //   "Day 4",
-  //   "Day 5",
-  //   "Day 6",
-  //   "Day 7",
-  //   "8",
-  //   "9",
-  //   "10",
-  //   "11",
-  //   "12",
-  // ],
   datasets: [
     {
       label: "Percent",
-      // data: [17, 5, 32, 12, 7, 59, 90],
       borderColor: "rgba(255, 255, 255, 0.8)",
       backgroundColor: "rgba(255, 255, 255, 0.5)",
       pointStyle: "circle",
@@ -92,7 +82,7 @@ const data = {
   ],
 };
 
-let floodProbability = new Chart(ctx, {
+let floodProbability = new Chart(linechart_ctx, {
   type: "line",
   data: data,
   options: {
@@ -105,6 +95,118 @@ let floodProbability = new Chart(ctx, {
       },
     },
     color: "rgba(255, 255, 255, 1)", // Legend Color
+    scales: {
+      x: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+      y: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+    },
+  },
+});
+
+let ultrasonicChart = new Chart(ultrasonic_ctx, {
+  type: "line",
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: () => "Ultrasonic",
+        color: "rgba(255, 255, 255, 1)",
+      },
+    },
+    color: "rgba(255, 255, 255, 1)",
+    scales: {
+      x: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+      y: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+    },
+  },
+});
+
+let waterLevelChart = new Chart(water_level_ctx, {
+  type: "line",
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: () => "Water Level",
+        color: "rgba(255, 255, 255, 1)",
+      },
+    },
+    color: "rgba(255, 255, 255, 1)",
+    scales: {
+      x: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+      y: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+    },
+  },
+});
+
+let waterFlowChart = new Chart(water_flow_ctx, {
+  type: "line",
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: () => "Water Flow Rate",
+        color: "rgba(255, 255, 255, 1)",
+      },
+    },
+    color: "rgba(255, 255, 255, 1)",
+    scales: {
+      x: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+      y: {
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+      },
+    },
+  },
+});
+
+let humidityChart = new Chart(humidity_ctx, {
+  type: "line",
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: () => "Humidity",
+        color: "rgba(255, 255, 255, 1)",
+      },
+    },
+    color: "rgba(255, 255, 255, 1)",
     scales: {
       x: {
         ticks: {
@@ -145,7 +247,16 @@ let probabilities = [];
     if (feed.field8) probabilities.push(feed.field8);
   });
 
+  probabilities = [32, 35, 37, 31, 40, 45];
+  ultrasonicReadings = [32, 35, 37, 31, 40, 45];
+  waterLevelReadings = [32, 35, 37, 31, 40, 45];
+  waterFlowReadings = [32, 35, 37, 31, 40, 45];
+  humidityReadings = [32, 35, 37, 31, 40, 45];
   addData(floodProbability, probabilities);
+  addData(ultrasonicChart, ultrasonicReadings);
+  addData(waterLevelChart, waterLevelReadings);
+  addData(waterFlowChart, waterFlowReadings);
+  addData(humidityChart, humidityReadings);
   updateCircle(probabilities[probabilities.length - 1]);
 })();
 
