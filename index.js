@@ -139,8 +139,15 @@ let ultrasonicChart = new Chart(ultrasonic_ctx, {
 });
 
 let waterLevelChart = new Chart(water_level_ctx, {
-  type: "line",
-  data: data,
+  type: "bar",
+  data: {
+    datasets: [
+      {
+        label: "Water Level",
+        backgroundColor: "rgba(6, 128, 213, 0.6)",
+      },
+    ],
+  },
   options: {
     responsive: true,
     plugins: {
@@ -168,7 +175,16 @@ let waterLevelChart = new Chart(water_level_ctx, {
 
 let waterFlowChart = new Chart(water_flow_ctx, {
   type: "line",
-  data: data,
+  data: {
+    datasets: [
+      {
+        label: "Interpolated Water Flow Rate",
+        borderColor: "rgba(6, 128, 253, 0.7)",
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
   options: {
     responsive: true,
     plugins: {
@@ -196,7 +212,18 @@ let waterFlowChart = new Chart(water_flow_ctx, {
 
 let humidityChart = new Chart(humidity_ctx, {
   type: "line",
-  data: data,
+  data: {
+    datasets: [
+      {
+        label: "Humidity",
+        yAxisID: "y1",
+      },
+      {
+        label: "Temperature",
+        yAxisID: "y2",
+      },
+    ],
+  },
   options: {
     responsive: true,
     plugins: {
@@ -213,9 +240,23 @@ let humidityChart = new Chart(humidity_ctx, {
           color: "rgba(255, 255, 255, 1)",
         },
       },
-      y: {
+      y1: {
+        type: "linear",
+        display: true,
+        position: "left",
         ticks: {
           color: "rgba(255, 255, 255, 1)",
+        },
+      },
+      y2: {
+        type: "linear",
+        display: true,
+        position: "right",
+        ticks: {
+          color: "rgba(255, 255, 255, 1)",
+        },
+        grid: {
+          drawOnChartArea: false,
         },
       },
     },
@@ -257,14 +298,15 @@ let probabilities = [];
   addData(waterLevelChart, waterLevelReadings);
   addData(waterFlowChart, waterFlowReadings);
   addData(humidityChart, humidityReadings);
+  addData(humidityChart, temperatureReadings, 1);
   updateCircle(probabilities[probabilities.length - 1]);
 })();
 
-function addData(chart, arr) {
+function addData(chart, arr, datasetID = 0) {
   let labels = [];
   for (let i = 0; i < arr.length; ++i) labels.push(String(i + 1));
   chart.data.labels = labels;
-  chart.data.datasets[0].data = arr;
+  chart.data.datasets[datasetID].data = arr;
   chart.update();
 }
 

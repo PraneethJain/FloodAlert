@@ -165,6 +165,7 @@ body {
   grid-template-rows: repeat(2, 300px);
   grid-template-columns: repeat(2, 1fr);
   width: 100%;
+  gap: 5rem;
 }
 
 .charts div {
