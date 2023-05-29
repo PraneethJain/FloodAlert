@@ -72,7 +72,7 @@ const humidity_ctx = document.getElementById("humidity");
 const data = {
   datasets: [
     {
-      label: "Percent",
+      label: "Height (cm)",
       borderColor: "rgba(255, 255, 255, 0.8)",
       backgroundColor: "rgba(255, 255, 255, 0.5)",
       pointStyle: "circle",
@@ -284,35 +284,40 @@ let probabilities = [];
   const data = await response.json();
 
   data.feeds.forEach((feed) => {
-    if (feed.field1) ultrasonicReadings.push(feed.field1);
-    if (feed.field2) waterLevelReadings.push(feed.field2);
-    if (feed.field3) waterFlowReadings.push(feed.field3);
-    if (feed.field4) soilMoistureReadings.push(feed.field4);
-    if (feed.field5) temperatureReadings.push(feed.field5);
-    if (feed.field6) pressureReadings.push(feed.field6);
-    if (feed.field7) humidityReadings.push(feed.field7);
-    if (feed.field8) probabilities.push(feed.field8);
+    let time = new Date(feed.created_at);
+    console.log(time);
+    if (feed.field1) ultrasonicReadings.push([feed.field1, time]);
+    if (feed.field2) waterLevelReadings.push([feed.field2, time]);
+    if (feed.field3) waterFlowReadings.push([feed.field3, time]);
+    if (feed.field4) soilMoistureReadings.push([feed.field4, time]);
+    if (feed.field5) temperatureReadings.push([feed.field5, time]);
+    if (feed.field6) pressureReadings.push([feed.field6, time]);
+    if (feed.field7) humidityReadings.push([feed.field7, time]);
+    if (feed.field8) probabilities.push([feed.field8, time]);
   });
 
-  probabilities = [32, 35, 37, 31, 40, 45];
-  ultrasonicReadings = [32, 35, 37, 31, 40, 45];
-  waterLevelReadings = [32, 35, 37, 31, 40, 45];
-  waterFlowReadings = [32, 35, 37, 31, 40, 45];
-  humidityReadings = [32, 35, 37, 31, 40, 45];
+  // ultrasonicReadings = [32, 35, 37, 31, 40, 45];
+  // waterLevelReadings = [32, 35, 37, 31, 40, 45];
+  // waterFlowReadings = [32, 35, 37, 31, 40, 45];
+  // humidityReadings = [32, 35, 37, 31, 40, 45];
   // addData(floodProbability, probabilities);
-  addData(ultrasonicChart, ultrasonicReadings);
-  addData(waterLevelChart, waterLevelReadings);
-  addData(waterFlowChart, waterFlowReadings);
-  addData(humidityChart, humidityReadings);
-  addData(humidityChart, temperatureReadings, 1);
-  updateCircle(probabilities[probabilities.length - 1]);
+  const dataPoints = 10;
+  addData(ultrasonicChart, ultrasonicReadings.slice(-dataPoints));
+  addData(waterLevelChart, waterLevelReadings.slice(-dataPoints));
+  addData(waterFlowChart, waterFlowReadings.slice(-dataPoints));
+  addData(humidityChart, humidityReadings.slice(-dataPoints));
+  addData(humidityChart, temperatureReadings.slice(-dataPoints), 1);
+  updateCircle(71);
 })();
 
 function addData(chart, arr, datasetID = 0) {
-  let labels = [];
-  for (let i = 0; i < arr.length; ++i) labels.push(String(i + 1));
-  chart.data.labels = labels;
-  chart.data.datasets[datasetID].data = arr;
+  let labels_arr = [];
+  for (let i = 0; i < arr.length; ++i)
+    labels_arr.push(arr[i][1].toLocaleTimeString());
+  chart.data.labels = labels_arr;
+  data_arr = [];
+  for (let i = 0; i < arr.length; ++i) data_arr.push(arr[i][0]);
+  chart.data.datasets[datasetID].data = data_arr;
   chart.update();
 }
 
