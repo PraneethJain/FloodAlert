@@ -85,10 +85,18 @@ const data = {
 let floodProbability = new Chart(probabilities_ctx, {
   type: "doughnut",
   data: {
-    labels: ["1", "2", "3", "4", "5", "6", "7", "8"],
+    labels: [
+      "Ultrasonic",
+      "Water Level",
+      "Soil Moisture",
+      "Water Flow",
+      "Temperature",
+      "Pressure",
+      "Humidity",
+    ],
     datasets: [
       {
-        data: [10, 20, 30, 40, 50, 60, 70, 80],
+        data: [100, 30, 30, 40, 8, 5, 15],
       },
     ],
   },
@@ -149,7 +157,7 @@ let waterLevelChart = new Chart(water_level_ctx, {
   data: {
     datasets: [
       {
-        label: "Water Level",
+        label: "Water Level (cm)",
         backgroundColor: "rgba(6, 128, 213, 0.6)",
       },
     ],
@@ -184,7 +192,7 @@ let waterFlowChart = new Chart(water_flow_ctx, {
   data: {
     datasets: [
       {
-        label: "Interpolated Water Flow Rate",
+        label: "Interpolated Water Flow Rate (L/min)",
         borderColor: "rgba(6, 128, 253, 0.7)",
         fill: false,
         tension: 0.4,
@@ -221,11 +229,11 @@ let humidityChart = new Chart(humidity_ctx, {
   data: {
     datasets: [
       {
-        label: "Humidity",
+        label: "Humidity (%)",
         yAxisID: "y1",
       },
       {
-        label: "Temperature",
+        label: "Temperature (C)",
         yAxisID: "y2",
       },
     ],
