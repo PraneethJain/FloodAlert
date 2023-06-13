@@ -2,17 +2,19 @@ let dataPage = document.querySelector(".dataPage");
 let progressBar = document.querySelector(".circular-progress");
 let valueContainer = document.querySelector(".value-container");
 
-const updateCircle = (val) => {
-  let currentIndex = 0;
-  let progressValue = 0;
-  let progressEndValue = val;
+const updateCircle = (from, to) => {
+  let progressValue = from;
+  let progressEndValue = to;
   let speed = 100 / Math.log(progressEndValue);
-  let delay = 2000;
 
   let progress;
 
   function updateProgress() {
-    progressValue++;
+    if (progressValue < progressEndValue)
+      progressValue++;
+    else
+      progressValue--;
+
     valueContainer.textContent = `${progressValue}%`;
     progressBar.style.background = `conic-gradient(
           ${getProgressColor(progressValue)} ${progressValue * 3.6}deg,
@@ -21,18 +23,6 @@ const updateCircle = (val) => {
 
     if (progressValue == progressEndValue) {
       clearInterval(progress);
-
-      setTimeout(() => {
-        currentIndex++;
-        if (currentIndex >= 1) {
-          return;
-        }
-
-        progressValue = 0;
-        progressEndValue = val;
-        speed = 100 / Math.log(progressEndValue);
-        progress = setInterval(updateProgress, speed);
-      }, delay);
     }
   }
 
@@ -333,48 +323,6 @@ let chart4 = new Chart(canvas4, {
   },
 });
 
-const fetchDataStart = async () => {
-  const response = await fetch("./simulation/demo.json");
-  const data = await response.json();
-  const floodData = data["Demo"];
-  // console.log(floodData);
-
-  const data1 = floodData["datas"];
-  const data2 = floodData["datas2"];
-  const data3 = floodData["datas3"];
-
-  let ultrasonicReadings = [];
-  let temperatureReadings = [];
-  let pressureReadings = [];
-  let moistureReadings = [];
-  let waterLevelReadings = [];
-  let soilMoistureReadings = [];
-  let waterFlowReadings = [];
-
-  data1.forEach(([a, b, c]) => {
-    waterLevelReadings.push(a);
-    soilMoistureReadings.push(b);
-    waterFlowReadings.push(c);
-  });
-
-  data2
-    .map((str) => str.replace(/nan/g, "0"))
-    .map(eval)
-    .forEach(([temp, press, moist]) => {
-      temperatureReadings.push(temp);
-      pressureReadings.push(press);
-      moistureReadings.push(moist);
-    });
-  ultrasonicReadings = data3.flat();
-
-  // console.log(ultrasonicReadings);
-  // console.log(temperatureReadings);
-  // console.log(pressureReadings);
-  // console.log(moistureReadings);
-  // console.log(waterLevelReadings);
-  // console.log(soilMoistureReadings);
-  // console.log(waterFlowReadings);
-};
 
 const fetchDataLoop = async () => {
   const response = await fetch("./simulation/demo.json");
@@ -443,9 +391,10 @@ const fetchDataLoop = async () => {
   chart4.data.datasets[0].data = waterFlowReadings;
   chart4.update();
 
+  // updateCircle(10, 50);
 };
 
-setInterval(fetchDataLoop, 1000);
+setInterval(fetchDataLoop, 5000);
 
 function addData(chart, arr, datasetID = 0) {
   // let labels_arr = [];
