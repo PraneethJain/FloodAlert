@@ -1,18 +1,18 @@
+let dataPage = document.querySelector(".dataPage");
 let progressBar = document.querySelector(".circular-progress");
 let valueContainer = document.querySelector(".value-container");
-let goButton = document.querySelector(".go");
 
-const updateCircle = (val) => {
-  let currentIndex = 0;
-  let progressValue = 0;
-  let progressEndValue = val;
+const updateCircle = (from, to) => {
+  let progressValue = from;
+  let progressEndValue = to;
   let speed = 100 / Math.log(progressEndValue);
-  let delay = 2000;
 
   let progress;
 
   function updateProgress() {
-    progressValue++;
+    if (progressValue < progressEndValue) progressValue++;
+    else progressValue--;
+
     valueContainer.textContent = `${progressValue}%`;
     progressBar.style.background = `conic-gradient(
           ${getProgressColor(progressValue)} ${progressValue * 3.6}deg,
@@ -21,18 +21,6 @@ const updateCircle = (val) => {
 
     if (progressValue == progressEndValue) {
       clearInterval(progress);
-
-      setTimeout(() => {
-        currentIndex++;
-        if (currentIndex >= 1) {
-          return;
-        }
-
-        progressValue = 0;
-        progressEndValue = val;
-        speed = 100 / Math.log(progressEndValue);
-        progress = setInterval(updateProgress, speed);
-      }, delay);
     }
   }
 
@@ -64,43 +52,25 @@ const updateCircle = (val) => {
 };
 
 const probabilities_ctx = document.getElementById("probabilities");
-const ultrasonic_ctx = document.getElementById("ultrasonic");
-const water_level_ctx = document.getElementById("water-level");
-const water_flow_ctx = document.getElementById("water-flow");
-const humidity_ctx = document.getElementById("humidity");
-
-const data = {
-  datasets: [
-    {
-      label: "Height (cm)",
-      borderColor: "rgba(255, 255, 255, 0.8)",
-      backgroundColor: "rgba(255, 255, 255, 0.5)",
-      pointStyle: "circle",
-      pointRadius: 10,
-      pointHoverRadius: 15,
-    },
-  ],
-};
 
 let floodProbability = new Chart(probabilities_ctx, {
   type: "doughnut",
   data: {
     labels: [
       "Ultrasonic",
+      "Air Moisture",
       "Water Level",
       "Soil Moisture",
       "Water Flow",
-      "Temperature",
-      "Pressure",
-      "Humidity",
     ],
     datasets: [
       {
-        data: [100, 30, 30, 40, 8, 5, 15],
+        data: [50, 5, 20, 5, 20],
       },
     ],
   },
   options: {
+    animation: false,
     responsive: true,
     plugins: {
       legend: {
@@ -124,160 +94,230 @@ let floodProbability = new Chart(probabilities_ctx, {
   },
 });
 
-let ultrasonicChart = new Chart(ultrasonic_ctx, {
-  type: "line",
-  data: data,
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: () => "Ultrasonic",
-        color: "rgba(255, 255, 255, 1)",
-      },
-    },
-    color: "rgba(255, 255, 255, 1)",
-    scales: {
-      x: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
-      },
-      y: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
-      },
-    },
-  },
-});
+let graphs = document.createElement("div");
+graphs.classList.add("graphs");
+let canvas1 = document.createElement("canvas");
+let canvas2 = document.createElement("canvas");
+let canvas3 = document.createElement("canvas");
+let canvas4 = document.createElement("canvas");
+let c1 = document.createElement("div");
+let c2 = document.createElement("div");
+let c3 = document.createElement("div");
+let c4 = document.createElement("div");
+c1.appendChild(canvas1);
+c2.appendChild(canvas2);
+c3.appendChild(canvas3);
+c4.appendChild(canvas4);
 
-let waterLevelChart = new Chart(water_level_ctx, {
-  type: "bar",
-  data: {
-    datasets: [
-      {
-        label: "Water Level (cm)",
-        backgroundColor: "rgba(6, 128, 213, 0.6)",
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: () => "Water Level",
-        color: "rgba(255, 255, 255, 1)",
-      },
-    },
-    color: "rgba(255, 255, 255, 1)",
-    scales: {
-      x: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
-      },
-      y: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
-      },
-    },
-  },
-});
-
-let waterFlowChart = new Chart(water_flow_ctx, {
+graphs.append(c1, c2, c3, c4);
+dataPage.appendChild(graphs);
+let chart1 = new Chart(canvas1, {
   type: "line",
   data: {
+    // labels: new Array(
+    //   Math.min(waterLevelReadings.length, ultrasonicReadings.length)
+    // ).fill(0),
     datasets: [
       {
-        label: "Interpolated Water Flow Rate (L/min)",
-        borderColor: "rgba(6, 128, 253, 0.7)",
-        fill: false,
-        tension: 0.4,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: () => "Water Flow Rate",
-        color: "rgba(255, 255, 255, 1)",
-      },
-    },
-    color: "rgba(255, 255, 255, 1)",
-    scales: {
-      x: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
-      },
-      y: {
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
-      },
-    },
-  },
-});
-
-let humidityChart = new Chart(humidity_ctx, {
-  type: "line",
-  data: {
-    datasets: [
-      {
-        label: "Humidity (%)",
+        label: "Water Level Readings",
+        // data: waterLevelReadings,
         yAxisID: "y1",
       },
       {
-        label: "Temperature (C)",
+        label: "Ultrasonic Readings",
+        // data: ultrasonicReadings,
         yAxisID: "y2",
       },
     ],
   },
   options: {
+    animation: false,
     responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: () => "Humidity",
-        color: "rgba(255, 255, 255, 1)",
-      },
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
     },
-    color: "rgba(255, 255, 255, 1)",
+    stacked: false,
     scales: {
       x: {
         ticks: {
-          color: "rgba(255, 255, 255, 1)",
+          display: false,
+        },
+        grid: {
+          display: false,
         },
       },
       y1: {
         type: "linear",
         display: true,
         position: "left",
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
+        grid: {
+          display: false,
         },
       },
       y2: {
         type: "linear",
         display: true,
         position: "right",
-        ticks: {
-          color: "rgba(255, 255, 255, 1)",
-        },
         grid: {
-          drawOnChartArea: false,
+          display: false,
         },
       },
     },
   },
 });
 
-const fetchData = async () => {
+let chart2 = new Chart(canvas2, {
+  type: "line",
+  data: {
+    // labels: new Array(
+    //   Math.min(soilMoistureReadings.length, moistureReadings.length)
+    // ).fill(0),
+    datasets: [
+      {
+        label: "Soil Moisture Readings",
+        // data: soilMoistureReadings,
+        yAxisID: "y1",
+      },
+      {
+        label: "Air Moisture Readings",
+        // data: moistureReadings,
+        yAxisID: "y2",
+      },
+    ],
+  },
+  options: {
+    animation: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    stacked: false,
+    scales: {
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y1: {
+        type: "linear",
+        display: true,
+        position: "left",
+        grid: {
+          display: false,
+        },
+      },
+      y2: {
+        type: "linear",
+        display: true,
+        position: "right",
+        grid: {
+          display: false,
+        },
+      },
+    },
+  },
+});
+
+let chart3 = new Chart(canvas3, {
+  type: "line",
+  data: {
+    datasets: [
+      {
+        label: "Temperature Readings",
+        yAxisID: "y1",
+      },
+      {
+        label: "Pressure Readings",
+        yAxisID: "y2",
+      },
+    ],
+  },
+  options: {
+    animation: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    stacked: false,
+    scales: {
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y1: {
+        type: "linear",
+        display: true,
+        position: "left",
+        grid: {
+          display: false,
+        },
+      },
+      y2: {
+        type: "linear",
+        display: true,
+        position: "right",
+        grid: {
+          display: false,
+        },
+      },
+    },
+  },
+});
+
+let chart4 = new Chart(canvas4, {
+  type: "line",
+  data: {
+    datasets: [
+      {
+        label: "Water Flow Readings",
+        yAxisID: "y",
+      },
+    ],
+  },
+  options: {
+    animation: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    stacked: false,
+    scales: {
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        type: "linear",
+        display: true,
+        position: "left",
+        grid: {
+          display: false,
+        },
+      },
+    },
+  },
+});
+
+const fetchDataLoop = async () => {
   const response = await fetch("./simulation/demo.json");
   const data = await response.json();
   const floodData = data["Demo"];
@@ -311,50 +351,72 @@ const fetchData = async () => {
     });
   ultrasonicReadings = data3.flat();
 
-  console.log(ultrasonicReadings);
-  console.log(temperatureReadings);
-  console.log(pressureReadings);
-  console.log(moistureReadings);
-  console.log(waterLevelReadings);
-  console.log(soilMoistureReadings);
-  console.log(waterFlowReadings);
+  const avg = (L) =>
+    L.slice(-10).reduce((a, b) => a + b, 0) / Math.min(10, L.length);
+
+  // console.log(ultrasonicReadings, avg(ultrasonicReadings));
+  // console.log(temperatureReadings, avg(temperatureReadings));
+  // console.log(pressureReadings, avg(pressureReadings));
+  // console.log(moistureReadings, avg(moistureReadings));
+  // console.log(waterLevelReadings, avg(waterLevelReadings));
+  // console.log(soilMoistureReadings, avg(soilMoistureReadings));
+  // console.log(waterFlowReadings, avg(waterFlowReadings));
+
+  let ultrasonicPercentage = Math.min(
+    100,
+    Math.max(0, 400 - 25 * avg(ultrasonicReadings))
+  );
+  let moisturePercentage = avg(moistureReadings);
+  let waterLevelPercentage = Math.min(100, avg(waterLevelReadings) / 14);
+  let soilMoisturePercentage = avg(soilMoistureReadings);
+  let waterFlowPercentage = Math.min((avg(waterFlowReadings) / 4.5) * 100, 100);
+
+  let factors = [
+    ultrasonicPercentage,
+    moisturePercentage,
+    waterLevelPercentage,
+    soilMoisturePercentage,
+    waterFlowPercentage,
+  ];
+  let weights = [0.5, 0.05, 0.2, 0.05, 0.2];
+
+  let probability = 0;
+
+  for (let i = 0; i < weights.length; ++i)
+    probability += factors[i] * weights[i];
+
+  console.log(probability);
+  updateCircle(0, Math.floor(probability));
+
+  chart1.data.labels = new Array(
+    Math.min(waterLevelReadings.length, ultrasonicReadings.length)
+  ).fill("");
+  chart1.data.datasets[0].data = waterLevelReadings;
+  chart1.data.datasets[1].data = ultrasonicReadings;
+  chart1.update();
+
+  chart2.data.labels = new Array(
+    Math.min(soilMoistureReadings.length, moistureReadings.length)
+  ).fill("");
+  chart2.data.datasets[0].data = soilMoistureReadings;
+  chart2.data.datasets[1].data = moistureReadings;
+  chart2.update();
+
+  chart3.data.labels = new Array(
+    Math.min(temperatureReadings.length, pressureReadings.length)
+  ).fill(0);
+  chart3.data.datasets[0].data = temperatureReadings;
+  chart3.data.datasets[1].data = pressureReadings;
+  chart3.update();
+
+  chart4.data.labels = new Array(waterFlowReadings.length).fill("");
+  chart4.data.datasets[0].data = waterFlowReadings;
+  chart4.update();
+
+  // updateCircle(10, 50);
 };
 
-fetchData();
-
-function addData(chart, arr, datasetID = 0) {
-  let labels_arr = [];
-  for (let i = 0; i < arr.length; ++i)
-    labels_arr.push(arr[i][1].toLocaleTimeString());
-  chart.data.labels = labels_arr;
-  data_arr = [];
-  for (let i = 0; i < arr.length; ++i) data_arr.push(arr[i][0]);
-  chart.data.datasets[datasetID].data = data_arr;
-  chart.update();
-}
-
-function removeData(chart) {
-  chart.data.labels.pop();
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data.pop();
-  });
-  chart.update();
-}
-
-const setUp = () => {
-  goButton.classList.add("up");
-  goButton.setAttribute("href", "#landingPage");
-};
-
-const setDown = () => {
-  goButton.classList.remove("up");
-  goButton.setAttribute("href", "#dataPage");
-};
-
-goButton.addEventListener("click", () => {
-  if (goButton.classList.contains("up")) setTimeout(setDown, 400);
-  else setTimeout(setUp, 400);
-});
+fetchDataLoop();
 
 progressBar.addEventListener("click", async (e) => {
   const val = 85 + Math.floor(Math.random() * 11) - 5;
@@ -366,6 +428,9 @@ progressBar.addEventListener("click", async (e) => {
     console.log("Thingspeak Overloaded!");
   } else {
     console.log("Updated value!");
-    updateCircle(val);
   }
+  updateCircle(
+    parseInt(document.querySelector(".value-container").textContent),
+    val
+  );
 });
