@@ -3,7 +3,7 @@ import json
 from rich import print
 from time import sleep
 
-ip = "192.168.63.201"
+ip = "192.168.38.201"
 name = "Demo"
 
 headers = {
