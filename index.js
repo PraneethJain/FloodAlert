@@ -58,16 +58,14 @@ let floodProbability = new Chart(probabilities_ctx, {
   data: {
     labels: [
       "Ultrasonic",
+      "Air Moisture",
       "Water Level",
       "Soil Moisture",
       "Water Flow",
-      "Temperature",
-      "Pressure",
-      "Humidity",
     ],
     datasets: [
       {
-        data: [100, 30, 30, 40, 8, 5, 15],
+        data: [50, 5, 20, 5, 20],
       },
     ],
   },
@@ -353,9 +351,8 @@ const fetchDataLoop = async () => {
     });
   ultrasonicReadings = data3.flat();
 
-  
   const avg = (L) =>
-  L.slice(-10).reduce((a, b) => a + b, 0) / Math.min(10, L.length);
+    L.slice(-10).reduce((a, b) => a + b, 0) / Math.min(10, L.length);
 
   // console.log(ultrasonicReadings, avg(ultrasonicReadings));
   // console.log(temperatureReadings, avg(temperatureReadings));
@@ -364,6 +361,32 @@ const fetchDataLoop = async () => {
   // console.log(waterLevelReadings, avg(waterLevelReadings));
   // console.log(soilMoistureReadings, avg(soilMoistureReadings));
   // console.log(waterFlowReadings, avg(waterFlowReadings));
+
+  let ultrasonicPercentage = Math.min(
+    100,
+    Math.max(0, 400 - 25 * avg(ultrasonicReadings))
+  );
+  let moisturePercentage = avg(moistureReadings);
+  let waterLevelPercentage = Math.min(100, avg(waterLevelReadings) / 14);
+  let soilMoisturePercentage = avg(soilMoistureReadings);
+  let waterFlowPercentage = Math.min((avg(waterFlowReadings) / 4.5) * 100, 100);
+
+  let factors = [
+    ultrasonicPercentage,
+    moisturePercentage,
+    waterLevelPercentage,
+    soilMoisturePercentage,
+    waterFlowPercentage,
+  ];
+  let weights = [0.5, 0.05, 0.2, 0.05, 0.2];
+
+  let probability = 0;
+
+  for (let i = 0; i < weights.length; ++i)
+    probability += factors[i] * weights[i];
+
+  console.log(probability);
+  updateCircle(0, Math.floor(probability));
 
   chart1.data.labels = new Array(
     Math.min(waterLevelReadings.length, ultrasonicReadings.length)
