@@ -8,6 +8,7 @@ body > div {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  margin-bottom: 3rem;
 }
 
 .graphs {
