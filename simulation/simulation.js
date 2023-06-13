@@ -25,12 +25,12 @@ const main = async () => {
   c2.appendChild(canvas2);
   c3.appendChild(canvas3);
   c4.appendChild(canvas4);
-  
+
   graphs.append(c1, c2, c3, c4);
   page.append(header, graphs);
   body.appendChild(page);
 
-  const floodData = data["Flood12"];
+  const floodData = data["Flood6"];
   const data1 = floodData["datas"];
   const data2 = floodData["datas2"];
   const data3 = floodData["datas3"];
@@ -61,10 +61,8 @@ const main = async () => {
   // console.log(moistureReadings);
   // console.log(waterLevelReadings);
   // console.log(soilMoistureReadings);
-  // console.log(waterFlowReadings);
+  console.log(waterFlowReadings);
 
-  console.log(waterLevelReadings);
-  console.log(ultrasonicReadings);
   new Chart(canvas1, {
     type: "line",
     data: {
@@ -121,7 +119,158 @@ const main = async () => {
     },
   });
 
-  
+  new Chart(canvas2, {
+    type: "line",
+    data: {
+      labels: new Array(
+        Math.min(soilMoistureReadings.length, moistureReadings.length)
+      ).fill(0),
+      datasets: [
+        {
+          label: "Soil Moisture Readings",
+          data: soilMoistureReadings,
+          yAxisID: "y1",
+        },
+        {
+          label: "Air Moisture Readings",
+          data: moistureReadings,
+          yAxisID: "y2",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      stacked: false,
+      scales: {
+        x: {
+          ticks: {
+            display: false,
+          },
+          grid: {
+            display: false,
+          },
+        },
+        y1: {
+          type: "linear",
+          display: true,
+          position: "left",
+          grid: {
+            display: false,
+          },
+        },
+        y2: {
+          type: "linear",
+          display: true,
+          position: "right",
+          grid: {
+            display: false,
+          },
+        },
+      },
+    },
+  });
+
+  new Chart(canvas3, {
+    type: "line",
+    data: {
+      labels: new Array(
+        Math.min(temperatureReadings.length, pressureReadings.length)
+      ).fill(0),
+      datasets: [
+        {
+          label: "Temperature Readings",
+          data: temperatureReadings,
+          yAxisID: "y1",
+        },
+        {
+          label: "Pressure Readings",
+          data: pressureReadings,
+          yAxisID: "y2",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      stacked: false,
+      scales: {
+        x: {
+          ticks: {
+            display: false,
+          },
+          grid: {
+            display: false,
+          },
+        },
+        y1: {
+          type: "linear",
+          display: true,
+          position: "left",
+          grid: {
+            display: false,
+          },
+        },
+        y2: {
+          type: "linear",
+          display: true,
+          position: "right",
+          grid: {
+            display: false,
+          },
+        },
+      },
+    },
+  });
+
+  new Chart(canvas4, {
+    type: "line",
+    data: {
+      labels: new Array(waterFlowReadings.length).fill(0),
+      datasets: [
+        {
+          label: "Water Flow Readings",
+          data: waterFlowReadings,
+          yAxisID: "y",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      stacked: false,
+      scales: {
+        x: {
+          ticks: {
+            display: false,
+          },
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          type: "linear",
+          display: true,
+          position: "left",
+          grid: {
+            display: false,
+          },
+        },
+      },
+    },
+  });
 };
 
 main();
