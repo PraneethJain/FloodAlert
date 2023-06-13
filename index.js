@@ -10,10 +10,8 @@ const updateCircle = (from, to) => {
   let progress;
 
   function updateProgress() {
-    if (progressValue < progressEndValue)
-      progressValue++;
-    else
-      progressValue--;
+    if (progressValue < progressEndValue) progressValue++;
+    else progressValue--;
 
     valueContainer.textContent = `${progressValue}%`;
     progressBar.style.background = `conic-gradient(
@@ -74,6 +72,7 @@ let floodProbability = new Chart(probabilities_ctx, {
     ],
   },
   options: {
+    animation: false,
     responsive: true,
     plugins: {
       legend: {
@@ -134,6 +133,7 @@ let chart1 = new Chart(canvas1, {
     ],
   },
   options: {
+    animation: false,
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -190,6 +190,7 @@ let chart2 = new Chart(canvas2, {
     ],
   },
   options: {
+    animation: false,
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -229,23 +230,19 @@ let chart2 = new Chart(canvas2, {
 let chart3 = new Chart(canvas3, {
   type: "line",
   data: {
-    // labels: new Array(
-    //   Math.min(temperatureReadings.length, pressureReadings.length)
-    // ).fill(0),
     datasets: [
       {
         label: "Temperature Readings",
-        // data: temperatureReadings,
         yAxisID: "y1",
       },
       {
         label: "Pressure Readings",
-        // data: pressureReadings,
         yAxisID: "y2",
       },
     ],
   },
   options: {
+    animation: false,
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -285,16 +282,15 @@ let chart3 = new Chart(canvas3, {
 let chart4 = new Chart(canvas4, {
   type: "line",
   data: {
-    // labels: new Array(waterFlowReadings.length).fill(0),
     datasets: [
       {
         label: "Water Flow Readings",
-        // data: waterFlowReadings,
         yAxisID: "y",
       },
     ],
   },
   options: {
+    animation: false,
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -322,7 +318,6 @@ let chart4 = new Chart(canvas4, {
     },
   },
 });
-
 
 const fetchDataLoop = async () => {
   const response = await fetch("./simulation/demo.json");
@@ -358,13 +353,17 @@ const fetchDataLoop = async () => {
     });
   ultrasonicReadings = data3.flat();
 
-  // console.log(ultrasonicReadings);
-  // console.log(temperatureReadings);
-  // console.log(pressureReadings);
-  // console.log(moistureReadings);
-  // console.log(waterLevelReadings);
-  // console.log(soilMoistureReadings);
-  // console.log(waterFlowReadings);
+  
+  const avg = (L) =>
+  L.slice(-10).reduce((a, b) => a + b, 0) / Math.min(10, L.length);
+
+  // console.log(ultrasonicReadings, avg(ultrasonicReadings));
+  // console.log(temperatureReadings, avg(temperatureReadings));
+  // console.log(pressureReadings, avg(pressureReadings));
+  // console.log(moistureReadings, avg(moistureReadings));
+  // console.log(waterLevelReadings, avg(waterLevelReadings));
+  // console.log(soilMoistureReadings, avg(soilMoistureReadings));
+  // console.log(waterFlowReadings, avg(waterFlowReadings));
 
   chart1.data.labels = new Array(
     Math.min(waterLevelReadings.length, ultrasonicReadings.length)
@@ -394,26 +393,7 @@ const fetchDataLoop = async () => {
   // updateCircle(10, 50);
 };
 
-setInterval(fetchDataLoop, 5000);
-
-function addData(chart, arr, datasetID = 0) {
-  // let labels_arr = [];
-  // for (let i = 0; i < arr.length; ++i)
-  //   labels_arr.push(arr[i][1].toLocaleTimeString());
-  // chart.data.labels = labels_arr;
-  // data_arr = [];
-  // for (let i = 0; i < arr.length; ++i) data_arr.push(arr[i][0]);
-  chart.data.datasets[datasetID].data = arr;
-  chart.update();
-}
-
-function removeData(chart) {
-  chart.data.labels.pop();
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data.pop();
-  });
-  chart.update();
-}
+fetchDataLoop();
 
 progressBar.addEventListener("click", async (e) => {
   const val = 85 + Math.floor(Math.random() * 11) - 5;
