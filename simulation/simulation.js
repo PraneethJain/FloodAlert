@@ -73,7 +73,7 @@ const main = async () => {
       data: {
         labels: new Array(
           Math.min(waterLevelReadings.length, ultrasonicReadings.length)
-        ).fill(0),
+        ).fill(""),
         datasets: [
           {
             label: "Water Level Readings",
@@ -129,7 +129,7 @@ const main = async () => {
       data: {
         labels: new Array(
           Math.min(soilMoistureReadings.length, moistureReadings.length)
-        ).fill(0),
+        ).fill(""),
         datasets: [
           {
             label: "Soil Moisture Readings",
@@ -185,7 +185,7 @@ const main = async () => {
       data: {
         labels: new Array(
           Math.min(temperatureReadings.length, pressureReadings.length)
-        ).fill(0),
+        ).fill(""),
         datasets: [
           {
             label: "Temperature Readings",
@@ -239,7 +239,7 @@ const main = async () => {
     new Chart(canvas4, {
       type: "line",
       data: {
-        labels: new Array(waterFlowReadings.length).fill(0),
+        labels: new Array(waterFlowReadings.length).fill(""),
         datasets: [
           {
             label: "Water Flow Readings",
