@@ -66,8 +66,7 @@ const main = async () => {
     // console.log(moistureReadings);
     // console.log(waterLevelReadings);
     // console.log(soilMoistureReadings);
-
-    console.log(waterFlowReadings);
+    // console.log(waterFlowReadings);
 
     new Chart(canvas1, {
       type: "line",

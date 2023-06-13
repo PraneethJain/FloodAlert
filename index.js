@@ -277,46 +277,51 @@ let humidityChart = new Chart(humidity_ctx, {
   },
 });
 
-let ultrasonicReadings = [];
-let waterLevelReadings = [];
-let waterFlowReadings = [];
-let soilMoistureReadings = [];
-let temperatureReadings = [];
-let pressureReadings = [];
-let humidityReadings = [];
-let probabilities = [];
-(async function test() {
-  const response = await fetch(
-    "https://api.thingspeak.com/channels/2151430/feeds.json?results=60"
-  );
+const fetchData = async () => {
+  const response = await fetch("./simulation/demo.json");
   const data = await response.json();
+  const floodData = data["Demo"];
+  console.log(floodData);
 
-  data.feeds.forEach((feed) => {
-    let time = new Date(feed.created_at);
-    // console.log(time);
-    if (feed.field1) ultrasonicReadings.push([feed.field1, time]);
-    if (feed.field2) waterLevelReadings.push([feed.field2, time]);
-    if (feed.field3) waterFlowReadings.push([feed.field3, time]);
-    if (feed.field4) soilMoistureReadings.push([feed.field4, time]);
-    if (feed.field5) temperatureReadings.push([feed.field5, time]);
-    if (feed.field6) pressureReadings.push([feed.field6, time]);
-    if (feed.field7) humidityReadings.push([feed.field7, time]);
-    if (feed.field8) probabilities.push([feed.field8, time]);
+  // const floodData = data[`Flood${i}`];
+  const data1 = floodData["datas"];
+  const data2 = floodData["datas2"];
+  const data3 = floodData["datas3"];
+
+  let ultrasonicReadings = [];
+  let temperatureReadings = [];
+  let pressureReadings = [];
+  let moistureReadings = [];
+  let waterLevelReadings = [];
+  let soilMoistureReadings = [];
+  let waterFlowReadings = [];
+
+  data1.forEach(([a, b, c]) => {
+    waterLevelReadings.push(a);
+    soilMoistureReadings.push(b);
+    waterFlowReadings.push(c);
   });
 
-  // ultrasonicReadings = [32, 35, 37, 31, 40, 45];
-  // waterLevelReadings = [32, 35, 37, 31, 40, 45];
-  // waterFlowReadings = [32, 35, 37, 31, 40, 45];
-  // humidityReadings = [32, 35, 37, 31, 40, 45];
-  // addData(floodProbability, probabilities);
-  const dataPoints = 10;
-  addData(ultrasonicChart, ultrasonicReadings.slice(-dataPoints));
-  addData(waterLevelChart, waterLevelReadings.slice(-dataPoints));
-  addData(waterFlowChart, waterFlowReadings.slice(-dataPoints));
-  addData(humidityChart, humidityReadings.slice(-dataPoints));
-  addData(humidityChart, temperatureReadings.slice(-dataPoints), 1);
-  updateCircle(71);
-})();
+  data2
+    .map((str) => str.replace(/nan/g, "0"))
+    .map(eval)
+    .forEach(([temp, press, moist]) => {
+      temperatureReadings.push(temp);
+      pressureReadings.push(press);
+      moistureReadings.push(moist);
+    });
+  ultrasonicReadings = data3.flat();
+
+  console.log(ultrasonicReadings);
+  console.log(temperatureReadings);
+  console.log(pressureReadings);
+  console.log(moistureReadings);
+  console.log(waterLevelReadings);
+  console.log(soilMoistureReadings);
+  console.log(waterFlowReadings);
+};
+
+fetchData();
 
 function addData(chart, arr, datasetID = 0) {
   let labels_arr = [];
