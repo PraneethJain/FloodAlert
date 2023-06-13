@@ -30,7 +30,7 @@ const main = async () => {
   page.append(header, graphs);
   body.appendChild(page);
 
-  const floodData = data["Flood6"];
+  const floodData = data["Flood13"];
   const data1 = floodData["datas"];
   const data2 = floodData["datas2"];
   const data3 = floodData["datas3"];
@@ -48,11 +48,15 @@ const main = async () => {
     soilMoistureReadings.push(b);
     waterFlowReadings.push(c);
   });
-  data2.map(eval).forEach(([temp, press, moist]) => {
-    temperatureReadings.push(temp);
-    pressureReadings.push(press);
-    moistureReadings.push(moist);
-  });
+
+  data2
+    .map((str) => str.replace(/nan/g, "0"))
+    .map(eval)
+    .forEach(([temp, press, moist]) => {
+      temperatureReadings.push(temp);
+      pressureReadings.push(press);
+      moistureReadings.push(moist);
+    });
   ultrasonicReadings = data3.flat();
 
   // console.log(ultrasonicReadings);
@@ -61,6 +65,7 @@ const main = async () => {
   // console.log(moistureReadings);
   // console.log(waterLevelReadings);
   // console.log(soilMoistureReadings);
+
   console.log(waterFlowReadings);
 
   new Chart(canvas1, {
