@@ -283,7 +283,6 @@ const fetchData = async () => {
   const floodData = data["Demo"];
   console.log(floodData);
 
-  // const floodData = data[`Flood${i}`];
   const data1 = floodData["datas"];
   const data2 = floodData["datas2"];
   const data3 = floodData["datas3"];
