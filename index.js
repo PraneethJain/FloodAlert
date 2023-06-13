@@ -293,7 +293,7 @@ let probabilities = [];
 
   data.feeds.forEach((feed) => {
     let time = new Date(feed.created_at);
-    console.log(time);
+    // console.log(time);
     if (feed.field1) ultrasonicReadings.push([feed.field1, time]);
     if (feed.field2) waterLevelReadings.push([feed.field2, time]);
     if (feed.field3) waterFlowReadings.push([feed.field3, time]);
@@ -350,4 +350,18 @@ const setDown = () => {
 goButton.addEventListener("click", () => {
   if (goButton.classList.contains("up")) setTimeout(setDown, 400);
   else setTimeout(setUp, 400);
+});
+
+progressBar.addEventListener("click", async (e) => {
+  const val = 85 + Math.floor(Math.random() * 11) - 5;
+  const res = await fetch(
+    `https://api.thingspeak.com/update?api_key=YSQDHI1PZ3YPFENE&field8=${val}`
+  );
+  const response = await res.json();
+  if (response == 0) {
+    console.log("Thingspeak Overloaded!");
+  } else {
+    console.log("Updated value!");
+    updateCircle(val);
+  }
 });
