@@ -428,6 +428,9 @@ progressBar.addEventListener("click", async (e) => {
     console.log("Thingspeak Overloaded!");
   } else {
     console.log("Updated value!");
-    updateCircle(val);
   }
+  updateCircle(
+    parseInt(document.querySelector(".value-container").textContent),
+    val
+  );
 });
