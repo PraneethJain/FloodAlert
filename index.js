@@ -386,6 +386,7 @@ const fetchDataLoop = async () => {
     probability += factors[i] * weights[i];
 
   console.log(probability);
+  updateValue(Math.floor(probability));
   updateCircle(0, Math.floor(probability));
 
   chart1.data.labels = new Array(
@@ -417,9 +418,9 @@ const fetchDataLoop = async () => {
 };
 
 fetchDataLoop();
+// setInterval(fetchDataLoop(), 2000);
 
-progressBar.addEventListener("click", async (e) => {
-  const val = 85 + Math.floor(Math.random() * 11) - 5;
+const updateValue = async (val) => {
   const res = await fetch(
     `https://api.thingspeak.com/update?api_key=YSQDHI1PZ3YPFENE&field8=${val}`
   );
@@ -433,4 +434,8 @@ progressBar.addEventListener("click", async (e) => {
     parseInt(document.querySelector(".value-container").textContent),
     val
   );
+};
+
+progressBar.addEventListener("click", async (e) => {
+  updateValue(85 + Math.floor(Math.random() * 11) - 5);
 });
