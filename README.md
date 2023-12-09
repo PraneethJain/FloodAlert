@@ -7,3 +7,7 @@ Through this project, we aim to utilize IoT to monitor floods accurately using c
 
 # Overview
 ![image](https://github.com/PraneethJain/FloodAlert/assets/49565677/f75df745-063d-4375-ba48-44f416554c76)
+
+# Frontend
+![Page 1](https://github.com/PraneethJain/FloodAlert/assets/49565677/4e44b032-1a95-4c88-83da-c718c1e5e06c)
+![Page 2](https://github.com/PraneethJain/FloodAlert/assets/49565677/8ea12ec6-2a79-4c19-95e9-bd552734318d)
